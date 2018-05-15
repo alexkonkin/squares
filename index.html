@@ -2,7 +2,6 @@
 <html>
   <head>
     <title> Qualium Systems Javascript test task </title>
-    <script type="text/javascript" src="main.js"></script>
     <style>
       canvas {        
         background: yellow;
@@ -11,10 +10,11 @@
   </head>
   <body>
     <div>
-      <button> Start </button>
-      <button> Stop </button>
+      <button id="start" onclick="startGame()"> Start </button>
+      <button id="stop" onclick="stopGame()"> Stop </button>
       <span> Score: <span id="score"> 0 </span> </span>
     </div>
-    <canvas width="640" height="480" id="canvas"></canvas>      
+    <canvas width="640" height="480" id="canvas"></canvas>
+    <script type="text/javascript" src="main.js"></script>
   </body>
 </html>
