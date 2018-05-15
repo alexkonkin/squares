@@ -255,6 +255,7 @@ function startGame(){
  */
 function stopGame(){
     updateCounter(0);
+    score = 0;
     window.clearInterval(intervalTimerRectangle);
     stopScheduledRectangles();
     clearAllRectangles();
