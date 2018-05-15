@@ -16,7 +16,14 @@ var intervalTimerGame = 0;
 var intervalTimerRectangles = [];
 var intervalTimerRectangle = 0;
 
-
+/**
+ * The function generates a single rectangle
+ * @param aX
+ * @param aY
+ * @param aColor
+ * @param aSpeed
+ * @returns {{x: *, y: *, width: number, height: number, fill: *, isDeleted: boolean, speed: *}}
+ */
 function generateRectangle(aX, aY, aColor, aSpeed){
     return {
         x: aX,
@@ -29,18 +36,38 @@ function generateRectangle(aX, aY, aColor, aSpeed){
     }
 }
 
+/**
+ * Function updates the counter with a desired value
+ * @param aScore
+ */
 function updateCounter(aScore){
     document.getElementById("score").innerHTML=aScore;
 }
 
+/**
+ * Helper fuction that generates a random position
+ * @returns {number}
+ */
 function generateRandomPosition(){
     return Math.floor(Math.random() * (canvas.clientWidth - 30));
 }
 
+/**
+ * The function gelerates a random integer in a given range
+ * @param min
+ * @param max
+ * @returns {*}
+ */
 function generateRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/**
+ * The function generates a random color except a yellow one
+ * to avoid a situation when a square has the same color as
+ * a game background field
+ * @returns {string}
+ */
 function generateRandomColor(){
     while(true) {
         if ((Math.random() * 0xFFFFFF << 0).toString(16) != 0xffff00){
@@ -49,6 +76,9 @@ function generateRandomColor(){
     }
 }
 
+/**
+ * The function schedules a generation of rectangle at a random moment
+ */
 function scheduleRectangleForGeneration(){
        var n=0;
        n = setTimeout(function(){ rects.push( generateRectangle(generateRandomPosition(),
@@ -60,12 +90,18 @@ function scheduleRectangleForGeneration(){
        intervalTimerRectangles.push(n);
 }
 
+/**
+ * The function moves all rectangles in array down the game field
+ */
 function moveRectanglesDown(){
     for (var i = 0; i < rects.length; i++) {
         rects[i].y += rects[i].speed;
     }
 }
 
+/**
+ * The fuction stops scheduling of the rectangles generation
+ */
 function stopScheduledRectangles(){
     for(var i = 0; i <= intervalTimerRectangles.length; i++){
         window.clearTimeout(intervalTimerRectangles[i]);
@@ -73,6 +109,9 @@ function stopScheduledRectangles(){
     intervalTimerRectangles = [];
 }
 
+/**
+ * The function removes all rectangles from the array that stores them
+ */
 function clearAllRectangles(){
     rects = [];
 }
@@ -83,6 +122,10 @@ var rects = [];
 //var timersRect
 var pos   = [];
 
+/**
+ * The function populates the game filed with an arbitrary
+ * number of rectangles
+ */
 function putInitialRectangles(){
     for (var n = 0; n <= generateRandomInt(1, 3); n++){
         rects.push(generateRectangle(generateRandomPosition(),
@@ -90,9 +133,13 @@ function putInitialRectangles(){
             generateRandomColor(),
             generateRandomInt(1,10)));
     }
-    console.log(rects.length);
 }
 
+/**
+ * The function initializes start and stop buttons
+ * to avoid a single button clicked twice
+ * @param state
+ */
 function initializeButtons(state){
     switch(state) {
         case "start":
@@ -112,7 +159,14 @@ canvas.onmousedown = myDown;
 // call to draw the scene
 draw();
 
-// draw a single rect
+
+/**
+ * The fucntion draws a single rectangle
+ * @param x
+ * @param y
+ * @param w
+ * @param h
+ */
 function rect(x, y, w, h) {
     ctx.beginPath();
     ctx.rect(x, y, w, h);
@@ -120,12 +174,16 @@ function rect(x, y, w, h) {
     ctx.fill();
 }
 
-// clear the canvas
+/**
+ * The function clears canvas
+ */
 function clear() {
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 }
 
-// redraw the scene
+/**
+ * The fucntion redraws the game field
+ */
 function draw() {
     clear();
 
@@ -141,7 +199,13 @@ function draw() {
 }
 
 
-// handle mousedown events
+
+/**
+ * The function handles mousedown events
+ * so that the clicked rectangle could be detected and removed
+ * it also updates a counter and shows its value in browser
+ * @param e
+ */
 function myDown(e) {
 
     // tell the browser we're handling this mouse event
@@ -173,6 +237,9 @@ function myDown(e) {
     startY = my;
 }
 
+/**
+ * The fuction starts game
+ */
 function startGame(){
     putInitialRectangles();
     intervalTimerRectangle = setInterval(function(){scheduleRectangleForGeneration();},1000);
@@ -183,6 +250,9 @@ function startGame(){
     initializeButtons("start");
 }
 
+/**
+ * The function stops game
+ */
 function stopGame(){
     updateCounter(0);
     window.clearInterval(intervalTimerRectangle);
@@ -193,4 +263,7 @@ function stopGame(){
     initializeButtons("stop");
 }
 
+/**
+ * initialization of the buttons state on document load
+ */
 window.onload = initializeButtons("stop");
